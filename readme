@@ -1,0 +1,9 @@
+     simple movies app
+to run app
+php app/MoviesApp.php                                              
+
+to run unit test:
+vendor/bin/phpunit
+
+
+     
