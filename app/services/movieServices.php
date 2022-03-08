@@ -3,9 +3,9 @@
 namespace App\Services;
 require_once(__DIR__."/../config/const.php");
 use App\Helper\CurlHelper as CurlHelper;
-use App\Services\IMovieServices as IMovieServices;
-class MovieServices implements IMovieServices {
-    public function getListRecommendedMovies($inputTime, $inputGenre){
+use App\Services\IWorker as IWorker;
+class MovieServices implements IWorker {
+    public function getListRecommended($inputTime, $inputGenre){
         try{
             $action = "GET";
             $url = ListMoviesUrl;
@@ -14,7 +14,7 @@ class MovieServices implements IMovieServices {
             $result = $curlHelper->perform_http_request($action, $url, $parameters);
             //echo $result;
             $listMovies= json_decode($result);
-            $returnMovies = $this->filterMovies($listMovies,$inputGenre,$inputTime);
+            $returnMovies = $this->filter($listMovies,$inputGenre,$inputTime);
 
             return $returnMovies;
             
@@ -25,7 +25,7 @@ class MovieServices implements IMovieServices {
         }
         
     }
-    public function filterMovies($listMovies,$inputGenre,$inputTime){
+    public function filter($listMovies,$inputGenre,$inputTime){
       $returnMovies = array();
       foreach($listMovies as $movie){
         $search_array = array_map('strtolower', $movie->genres);
@@ -49,7 +49,7 @@ class MovieServices implements IMovieServices {
        }
         return $returnMovies;
     }
-    public function printMovies($movies){
+    public function show($movies){
         date_default_timezone_set(LOCAL_TIMEZONE);
         if($movies!=null and count($movies)>0){
           
